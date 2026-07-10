@@ -2,7 +2,11 @@
 <html lang="ca">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Pissarra de Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --board:#1e3d2f;
@@ -19,7 +23,7 @@
   html,body{
     margin:0;height:100%;
     background:var(--wood-dark);
-    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    font-family: 'Arimo', "Trebuchet MS", "Segoe UI", Verdana, Arial, sans-serif;
     color:var(--chalk);
     overflow:hidden;
   }
@@ -54,11 +58,13 @@
   .board-title{
     position:absolute;
     top:20px; left:34px;
-    font-family:"Comic Sans MS","Segoe Print",cursive;
+    font-family:'Arimo',"Trebuchet MS","Segoe UI",Verdana,Arial,sans-serif;
     font-size:1.35rem;
     opacity:0.95;
     z-index:3;
   }
+
+  .board.playing .board-title{display:none;}
 
   .screen{
     position:absolute; inset:0;
@@ -78,6 +84,10 @@
     max-width:480px;
     margin-bottom:8px;
   }
+  #startScreen, #listenScreen{
+    padding-top:76px;
+  }
+
   .mode-cards{
     display:flex;
     gap:22px;
@@ -97,7 +107,7 @@
   .mode-card:hover{border-color:var(--yellow); transform:translateY(-3px);}
   .mode-card h3{
     margin:0 0 10px;
-    font-family:"Comic Sans MS","Segoe Print",cursive;
+    font-family:'Arimo',"Trebuchet MS","Segoe UI",Verdana,Arial,sans-serif;
     font-weight:normal;
     font-size:1.3rem;
   }
@@ -182,7 +192,7 @@
   }
   .modal-panel h2{
     margin:0 0 18px;
-    font-family:"Comic Sans MS","Segoe Print",cursive;
+    font-family:'Arimo',"Trebuchet MS","Segoe UI",Verdana,Arial,sans-serif;
     font-weight:normal;
     font-size:1.3rem;
   }
@@ -215,7 +225,7 @@
   }
 
   .btn{
-    font-family:"Comic Sans MS","Segoe Print",cursive;
+    font-family:'Arimo',"Trebuchet MS","Segoe UI",Verdana,Arial,sans-serif;
     padding:9px 22px;
     border-radius:8px;
     border:2px solid var(--yellow);
@@ -232,8 +242,12 @@
   .btn.secondary:hover{border-color:var(--chalk); color:var(--chalk); background:rgba(255,255,255,0.06);}
 
   #countdownScreen .count-number{
-    font-family:"Comic Sans MS","Segoe Print",cursive;
+    font-family:'Arimo',"Trebuchet MS","Segoe UI",Verdana,Arial,sans-serif;
     font-size:7rem;
+    font-weight:800;
+  }
+  #countdownScreen .count-number.is-word{
+    font-size:2.6rem;
   }
 
   #playScreen{
@@ -261,7 +275,7 @@
   }
 
   .note-display{
-    font-family:"Comic Sans MS","Segoe Print",cursive;
+    font-family:'Arimo',"Trebuchet MS","Segoe UI",Verdana,Arial,sans-serif;
     font-size:6rem;
     line-height:1;
     color:var(--chalk);
@@ -295,17 +309,23 @@
     grid-template-columns:repeat(4, 1fr);
     gap:12px;
     width:100%;
-    max-width:540px;
+    max-width:440px;
   }
   .choice{
-    font-family:"Comic Sans MS","Segoe Print",cursive;
+    font-family:'Arimo',"Trebuchet MS","Segoe UI",Verdana,Arial,sans-serif;
     font-size:1.4rem;
-    padding:13px 6px;
+    font-weight:700;
+    aspect-ratio:1 / 1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6px;
     background:transparent;
     border:2px solid var(--chalk-dim);
-    border-radius:8px;
+    border-radius:12px;
     color:var(--chalk);
     cursor:pointer;
+    touch-action:manipulation;
     transition: transform 0.08s, border-color 0.2s, background 0.2s;
   }
   .choice:hover{border-color:var(--yellow); transform:translateY(-2px);}
@@ -339,12 +359,12 @@
   }
   .pause-overlay.active{display:flex;}
   .pause-overlay .pause-label{
-    font-family:"Comic Sans MS","Segoe Print",cursive;
+    font-family:'Arimo',"Trebuchet MS","Segoe UI",Verdana,Arial,sans-serif;
     font-size:2rem;
   }
 
   #summaryScreen h2{
-    font-family:"Comic Sans MS","Segoe Print",cursive;
+    font-family:'Arimo',"Trebuchet MS","Segoe UI",Verdana,Arial,sans-serif;
     font-weight:normal;
     font-size:1.8rem;
     margin-bottom:10px;
@@ -369,7 +389,7 @@
   }
   .panel h2{
     margin:0 0 18px;
-    font-family:"Comic Sans MS","Segoe Print",cursive;
+    font-family:'Arimo',"Trebuchet MS","Segoe UI",Verdana,Arial,sans-serif;
     font-weight:normal;
     font-size:1.4rem;
   }
@@ -407,32 +427,16 @@
     margin-top:10px;
     line-height:1.4;
   }
-  .listen-row{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-top:14px;
+  .choice.choice-two-line{
+    flex-direction:column;
   }
-  .listen-note-btn{
-    font-family:"Comic Sans MS","Segoe Print",cursive;
-    font-size:1.1rem;
-    padding:10px 4px;
-    width:52px;
-    background:transparent;
-    border:2px solid var(--chalk-dim);
-    border-radius:8px;
-    color:var(--chalk);
-    cursor:pointer;
-    transition: transform 0.08s, border-color 0.2s;
-    line-height:1.2;
-  }
-  .listen-note-btn .listen-note-sub{
+  .choice .listen-note-sub{
     display:block;
-    font-size:0.7rem;
+    font-size:0.8rem;
+    font-weight:600;
     opacity:0.65;
-    font-family:"Trebuchet MS","Segoe UI",sans-serif;
+    margin-top:2px;
   }
-  .listen-note-btn:hover{border-color:var(--yellow); transform:translateY(-2px);}
   .listen-hint{
     font-size:0.8rem;
     color:var(--chalk-dim);
@@ -440,10 +444,33 @@
     margin-top:8px;
   }
 
+  .board.compact .note-display{font-size:4rem;}
+  .board.compact .choices{
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    max-width:320px;
+  }
+  .board.compact .choice{
+    font-size:1.3rem;
+  }
+  .board.compact .choice .listen-note-sub{font-size:0.75rem;}
+  .board.compact .listen-hint{font-size:0.9rem;}
+  .board.compact .board-title{font-size:1.05rem; display:none;}
+  .board.compact .mode-card{width:100%;}
+
   @media (max-width:600px){
     .note-display{font-size:4rem;}
-    .choices{grid-template-columns:repeat(2,1fr);}
-    .board-title{font-size:1.05rem;}
+    .choices{
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      max-width:320px;
+    }
+    .choice{
+      font-size:1.3rem;
+    }
+    .choice .listen-note-sub{font-size:0.75rem;}
+    .listen-hint{font-size:0.9rem;}
+    .board-title{font-size:1.05rem; display:none;}
     .mode-card{width:100%;}
   }
 </style>
@@ -486,7 +513,7 @@
     <div class="screen" id="listenScreen">
       <button class="settings-link" id="listenBackBtn">Torna al menú principal</button>
       <p class="subtitle" id="listenHint">Fes clic a cada nota per escoltar el seu so.</p>
-      <div class="listen-row" id="listenRow"></div>
+      <div class="choices" id="listenRow"></div>
     </div>
 
     <div class="screen" id="playScreen">
@@ -991,9 +1018,22 @@ document.querySelectorAll('.lang-btn').forEach(btn=>{
 });
 document.querySelector('.lang-btn[data-lang="ca"]').classList.add('active');
 
+const boardEl = document.getElementById('board');
+function updateCompactMode(){
+  const w = boardEl.getBoundingClientRect().width;
+  boardEl.classList.toggle('compact', w > 0 && w < 620);
+}
+updateCompactMode();
+if(window.ResizeObserver){
+  new ResizeObserver(updateCompactMode).observe(boardEl);
+} else {
+  window.addEventListener('resize', updateCompactMode);
+}
+
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  document.getElementById('board').classList.toggle('playing', id === 'playScreen');
 }
 
 function shuffle(arr){
@@ -1053,7 +1093,7 @@ function renderListenRow(){
   listenRow.innerHTML = '';
   PAIRS.forEach(pair=>{
     const btn = document.createElement('button');
-    btn.className = 'listen-note-btn';
+    btn.className = 'choice choice-two-line';
     btn.innerHTML = pair.solfa + '<span class="listen-note-sub">' + pair.letter + '</span>';
     btn.addEventListener('click', ()=>{ ensureAudio(); playNote(pair.letter); });
     listenRow.appendChild(btn);
@@ -1154,12 +1194,14 @@ function startSession(type, target, config){
 function runCountdown(){
   showScreen('countdownScreen');
   let n = 3;
+  countNumber.classList.remove('is-word');
   countNumber.textContent = n;
   const iv = setInterval(()=>{
     n--;
     if(n>0){
       countNumber.textContent = n;
     } else if(n===0){
+      countNumber.classList.add('is-word');
       countNumber.textContent = T('countGo');
     } else {
       clearInterval(iv);
