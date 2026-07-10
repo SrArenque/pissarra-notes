@@ -330,6 +330,11 @@
   }
   .choice:hover{border-color:var(--yellow); transform:translateY(-2px);}
   .choice.correct{background:rgba(123,184,217,0.25); border-color:var(--blue);}
+  .choice.note-playing{
+    background:rgba(232,195,76,0.28);
+    border-color:var(--yellow);
+    transform:scale(1.06);
+  }
   .choice.wrong{background:rgba(224,122,146,0.25); border-color:var(--pink);}
   .choice[disabled]{cursor:default;}
 
@@ -697,7 +702,7 @@ const I18N = {
     optFixed:"Nombre fix de rondes",
     listenCardTitle:"Escolta i aprèn les notes",
     listenCardDesc:"Escolta cada nota i associa-la amb el seu nom en solfeig tradicional i en xifrat americà.",
-    listenHint:"Fes clic a cada nota per escoltar el seu so.",
+    listenHint:"Fes clic a cada nota (o prem 1–7 al teclat) per escoltar el seu so.",
     pauseBtn:"Pausa",
     resumeBtn:"Continua",
     pausedLabel:"En pausa",
@@ -762,7 +767,7 @@ const I18N = {
     optFixed:"Número fijo de rondas",
     listenCardTitle:"Escucha y aprende las notas",
     listenCardDesc:"Escucha cada nota y asóciala con su nombre en solfeo tradicional y en cifrado americano.",
-    listenHint:"Haz clic en cada nota para escuchar su sonido.",
+    listenHint:"Haz clic en cada nota (o pulsa 1–7 en el teclado) para escuchar su sonido.",
     pauseBtn:"Pausa",
     resumeBtn:"Continuar",
     pausedLabel:"En pausa",
@@ -827,7 +832,7 @@ const I18N = {
     optFixed:"Fixed number of rounds",
     listenCardTitle:"Listen and learn the notes",
     listenCardDesc:"Listen to each note and match it with its traditional solfège and American letter name.",
-    listenHint:"Click each note to hear its sound.",
+    listenHint:"Click each note (or press 1–7 on your keyboard) to hear its sound.",
     pauseBtn:"Pause",
     resumeBtn:"Resume",
     pausedLabel:"Paused",
@@ -1092,7 +1097,13 @@ function renderListenRow(){
     const btn = document.createElement('button');
     btn.className = 'choice choice-two-line';
     btn.innerHTML = pair.solfa + '<span class="listen-note-sub">' + pair.letter + '</span>';
-    btn.addEventListener('click', ()=>{ ensureAudio(); playNote(pair.letter); });
+    btn.addEventListener('click', ()=>{
+      ensureAudio();
+      playNote(pair.letter);
+      btn.classList.add('note-playing');
+      clearTimeout(btn._flashTimeout);
+      btn._flashTimeout = setTimeout(()=>btn.classList.remove('note-playing'), 275);
+    });
     listenRow.appendChild(btn);
   });
 }
@@ -1390,11 +1401,18 @@ replayBtn.addEventListener('click', ()=>{
 });
 
 document.addEventListener('keydown', (e)=>{
-  if(!playScreen.classList.contains('active') || paused) return;
   const n = parseInt(e.key);
-  if(n>=1 && n<=7){
+  if(!(n>=1 && n<=7)) return;
+
+  if(playScreen.classList.contains('active') && !paused){
     const btn = choicesEl.children[n-1];
     if(btn && !btn.disabled) handleAnswer(btn.dataset.value, btn);
+    return;
+  }
+
+  if(document.getElementById('listenScreen').classList.contains('active')){
+    const btn = listenRow.children[n-1];
+    if(btn) btn.click();
   }
 });
 
