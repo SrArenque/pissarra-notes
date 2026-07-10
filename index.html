@@ -2,7 +2,6 @@
 <html lang="ca">
 <head>
 <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Pissarra de Notes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,17 +21,17 @@
   }
   *{box-sizing:border-box;}
   html,body{
-    margin:0;height:100%;
+    margin:0;min-height:100%;
     background:var(--wood-dark);
     font-family: 'Arimo', "Trebuchet MS", "Segoe UI", Verdana, Arial, sans-serif;
     color:var(--chalk);
-    overflow:hidden;
   }
 
   .frame{
     position:relative;
     width:100%;
-    height:100%;
+    min-height:100vh;
+    min-height:100dvh;
     padding:22px;
     background:
       linear-gradient(var(--wood-dark),var(--wood-dark)) top/100% 14px no-repeat,
@@ -47,13 +46,16 @@
     position:relative;
     width:min(960px, 100%);
     height:min(700px, 96vh);
+    height:min(700px, 96dvh);
     background:
       radial-gradient(ellipse at 20% 15%, rgba(255,255,255,0.05), transparent 40%),
       radial-gradient(ellipse at 80% 85%, rgba(255,255,255,0.04), transparent 45%),
       var(--board);
     border-radius:6px;
     box-shadow: inset 0 0 60px rgba(0,0,0,0.55), 0 20px 50px rgba(0,0,0,0.5);
-    overflow:hidden;
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
   }
 
   .board-title{
@@ -72,7 +74,8 @@
     display:none;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
+    justify-content:flex-start;
+    justify-content:safe center;
     z-index:2;
     padding:34px;
     text-align:center;
