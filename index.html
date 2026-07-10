@@ -84,7 +84,7 @@
     max-width:480px;
     margin-bottom:8px;
   }
-  #startScreen, #listenScreen{
+  #listenScreen{
     padding-top:76px;
   }
 
@@ -482,7 +482,6 @@
     <div class="board-title" id="boardTitle">Pissarra de Notes</div>
 
     <div class="screen active" id="startScreen">
-      <button class="settings-link" id="gearBtn">Configuració</button>
       <p class="subtitle" id="startSubtitle">Escull una de les següents opcions</p>
       <div class="mode-cards">
         <div class="mode-card" id="timeTrialCard">
@@ -913,7 +912,6 @@ const pauseBtn = document.getElementById('pauseBtn');
 const menuDuringPlayBtn = document.getElementById('menuDuringPlayBtn');
 
 const overlay = document.getElementById('overlay');
-const gearBtn = document.getElementById('gearBtn');
 const settingsClose = document.getElementById('settingsClose');
 const settingsSave = document.getElementById('settingsSave');
 const timeSlider = document.getElementById('timeSlider');
@@ -949,7 +947,6 @@ function T(key){ return I18N[state.language][key]; }
 function applyI18N(){
   boardTitle.textContent = T('boardTitle');
   document.getElementById('startSubtitle').textContent = T('startSubtitle');
-  gearBtn.textContent = T('settingsLink');
   document.getElementById('ttCardTitle').textContent = T('ttCardTitle');
   document.getElementById('ttCardDesc').textContent = T('ttCardDesc');
   document.getElementById('fpCardTitle').textContent = T('fpCardTitle');
@@ -1463,11 +1460,6 @@ function goToMenu(){
   showScreen('startScreen');
 }
 
-gearBtn.addEventListener('click', ()=>{
-  settingsLaunchCallback = null;
-  populateSettingsForm();
-  overlay.classList.add('open');
-});
 settingsClose.addEventListener('click', ()=>{
   settingsLaunchCallback = null;
   overlay.classList.remove('open');
