@@ -2,7 +2,7 @@
 <html lang="ca">
 <head>
 <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="favicon.png">
+<link rel="icon" type="image/png" href="favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Pissarra de Notes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -509,9 +509,9 @@
       </div>
       <div class="lang-row">
         <span class="lbl" id="langLabel">Idioma</span>
-        <button class="lang-btn" id="langLabelcat" data-lang="ca">Català</button>
-        <button class="lang-btn" id="langLabelcast" data-lang="es">Castellà</button>
-        <button class="lang-btn" id="langLabeleng" data-lang="en">Anglès</button>
+        <button class="lang-btn" data-lang="ca" id="langBtnCa">Català</button>
+        <button class="lang-btn" data-lang="es" id="langBtnEs">Castellà</button>
+        <button class="lang-btn" data-lang="en" id="langBtnEn">Anglès</button>
       </div>
     </div>
 
@@ -554,6 +554,7 @@
       <p id="summaryText">Has encertat 0 de 0</p>
       <div class="summary-actions">
         <button class="btn" id="playAgainBtn">Torna a jugar</button>
+        <button class="btn secondary" id="shareBtn" style="display:none;">Comparteix els resultats</button>
         <button class="btn secondary" id="backMenuBtn">Torna al menú principal</button>
       </div>
     </div>
@@ -679,9 +680,9 @@ const I18N = {
     fpCardTitle:"Pràctica lliure",
     fpCardDesc:"Practica amb la configuració que decideixis",
     langLabel:"Idioma",
-    langLabelcat:"Català",
-    langLabelcast:"Castellà",
-    langLabeleng:"Anglés",
+    langCatalan:"Català",
+    langSpanish:"Castellà",
+    langEnglish:"Anglès",
     ttModalTitle:"Contrarellotge",
     ttModalLabel:"Nombre de rondes",
     ttModalStart:"Comença",
@@ -732,6 +733,9 @@ const I18N = {
     summaryTimeText:(t)=>`Temps total: ${t} s`,
     playAgainBtn:"Torna a jugar",
     backMenuBtn:"Torna al menú principal",
+    shareBtn:"Comparteix els resultats",
+    shareCopied:"Copiat!",
+    shareText:(time,score,total)=>`He completat el Contrarellotge de Pissarra de Notes en ${time}s (${score}/${total} encerts). Prova-ho tu també: https://davidukelele.github.io/pissarra-notes/`,
     countGo:"Comença!",
     saveBtn:"A jugar!",
     timeLabelStat:"Temps",
@@ -747,9 +751,9 @@ const I18N = {
     fpCardTitle:"Práctica libre",
     fpCardDesc:"Practica con la configuración que decidas",
     langLabel:"Idioma",
-    langLabelcat:"Catalán",
-    langLabelcast:"Castellano",
-    langLabeleng:"Inglés",
+    langCatalan:"Catalán",
+    langSpanish:"Castellano",
+    langEnglish:"Inglés",
     ttModalTitle:"Contrarreloj",
     ttModalLabel:"Número de rondas",
     ttModalStart:"Empieza",
@@ -800,6 +804,9 @@ const I18N = {
     summaryTimeText:(t)=>`Tiempo total: ${t} s`,
     playAgainBtn:"Vuelve a jugar",
     backMenuBtn:"Vuelve al menú principal",
+    shareBtn:"Comparte los resultados",
+    shareCopied:"¡Copiado!",
+    shareText:(time,score,total)=>`He completado el Contrarreloj de Pizarra de Notas en ${time}s (${score}/${total} aciertos). Pruébalo tú también: https://davidukelele.github.io/pissarra-notes/`,
     countGo:"¡Empieza!",
     saveBtn:"¡A jugar!",
     timeLabelStat:"Tiempo",
@@ -815,9 +822,9 @@ const I18N = {
     fpCardTitle:"Free Practice",
     fpCardDesc:"Practice with whatever settings you choose",
     langLabel:"Language",
-    langLabelcat:"Catalan",
-    langLabelcast:"Spanish",
-    langLabeleng:"English",
+    langCatalan:"Catalan",
+    langSpanish:"Spanish",
+    langEnglish:"English",
     ttModalTitle:"Time Trial",
     ttModalLabel:"Number of rounds",
     ttModalStart:"Start",
@@ -868,6 +875,9 @@ const I18N = {
     summaryTimeText:(t)=>`Total time: ${t} s`,
     playAgainBtn:"Play again",
     backMenuBtn:"Back to main menu",
+    shareBtn:"Share results",
+    shareCopied:"Copied!",
+    shareText:(time,score,total)=>`I finished the Note Chalkboard Time Trial in ${time}s (${score}/${total} correct). Try it yourself: https://davidukelele.github.io/pissarra-notes/`,
     countGo:"Go!",
     saveBtn:"Let's play!",
     timeLabelStat:"Time",
@@ -958,6 +968,7 @@ const listenCard = document.getElementById('listenCard');
 const listenBackBtn = document.getElementById('listenBackBtn');
 const playAgainBtn = document.getElementById('playAgainBtn');
 const backMenuBtn = document.getElementById('backMenuBtn');
+const shareBtn = document.getElementById('shareBtn');
 const summaryTitle = document.getElementById('summaryTitle');
 const summaryText = document.getElementById('summaryText');
 
@@ -971,9 +982,9 @@ function applyI18N(){
   document.getElementById('fpCardTitle').textContent = T('fpCardTitle');
   document.getElementById('fpCardDesc').textContent = T('fpCardDesc');
   document.getElementById('langLabel').textContent = T('langLabel');
-  document.getElementById('langLabelcat').textContent = T('langLabelcat');
-  document.getElementById('langLabelcast').textContent = T('langLabelcast');
-  document.getElementById('langLabeleng').textContent = T('langLabeleng');
+  document.getElementById('langBtnCa').textContent = T('langCatalan');
+  document.getElementById('langBtnEs').textContent = T('langSpanish');
+  document.getElementById('langBtnEn').textContent = T('langEnglish');
 
   document.getElementById('ttModalTitle').textContent = T('ttModalTitle');
   document.getElementById('ttModalLabel').textContent = T('ttModalLabel');
@@ -1019,6 +1030,7 @@ function applyI18N(){
   hintText.textContent = T('hintText');
   playAgainBtn.textContent = T('playAgainBtn');
   backMenuBtn.textContent = T('backMenuBtn');
+  shareBtn.textContent = T('shareBtn');
   settingsSave.textContent = T('saveBtn');
   document.getElementById('timeStat').childNodes[0].textContent = T('timeLabelStat')+' ';
 
@@ -1470,6 +1482,8 @@ menuDuringPlayBtn.addEventListener('click', ()=>{
   goToMenu();
 });
 
+let lastTimeTrialTotal = null;
+
 function showSummary(){
   clearInterval(timerId);
   clearInterval(elapsedTimerId);
@@ -1479,6 +1493,12 @@ function showSummary(){
     const realSeconds = (Date.now() - session.startTime)/1000;
     const totalSeconds = (realSeconds + session.penaltySeconds).toFixed(1);
     txt += ' — ' + T('summaryTimeText')(totalSeconds) + ' (' + T('timeDetailReal') + ': ' + realSeconds.toFixed(1) + 's + ' + T('timeDetailPenalty') + ': ' + session.penaltySeconds.toFixed(1) + 's)';
+    lastTimeTrialTotal = totalSeconds;
+    shareBtn.style.display = '';
+    shareBtn.textContent = T('shareBtn');
+  } else {
+    lastTimeTrialTotal = null;
+    shareBtn.style.display = 'none';
   }
   summaryText.textContent = txt;
   showScreen('summaryScreen');
@@ -1488,6 +1508,26 @@ playAgainBtn.addEventListener('click', ()=>{
   startSession(session.type, session.target, session.config);
 });
 backMenuBtn.addEventListener('click', goToMenu);
+
+shareBtn.addEventListener('click', async ()=>{
+  if(lastTimeTrialTotal === null) return;
+  const text = T('shareText')(lastTimeTrialTotal, session.score, session.target);
+  try{
+    await navigator.clipboard.writeText(text);
+  } catch(err){
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+  const original = T('shareBtn');
+  shareBtn.textContent = T('shareCopied');
+  setTimeout(()=>{ shareBtn.textContent = original; }, 1800);
+});
 
 function goToMenu(){
   clearInterval(timerId);
